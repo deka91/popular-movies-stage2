@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.popularmoviesstage1">
+    package="com.example.android.popularmoviesstage2">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.example.android.popularmoviesstage2.ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,13 +20,16 @@
         </activity>
 
         <activity
-            android:name=".MovieDetailActivity"
-            android:parentActivityName=".MainActivity">
-            <meta-data
+            android:name="com.example.android.popularmoviesstage2.ui.MovieDetailActivity"
+            android:parentActivityName="com.example.android.popularmoviesstage2.ui.MainActivity">
+            <meta-reviews
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value="com.example.android.popularmoviesstage2.ui.MainActivity" />
         </activity>
-
+        <provider
+            android:authorities="@string/content_authority"
+            android:name=".database.MovieProvider"
+            android:exported="false" />
     </application>
 
 </manifest>

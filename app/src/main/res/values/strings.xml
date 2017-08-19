@@ -1,10 +1,12 @@
 <resources>
-    <string name="app_name">Popular Movies</string>
-    <string name="error_message">An error has occurred. Please check your internet connection and try again by clicking REFRESH.</string>
-    <string name="refresh">Refresh</string>
-    <string name="most_popular">Sort by most popular</string>
-    <string name="top_rated">Sort by highest rated</string>
-    <string name="release">Release:</string>
-    <string name="rating">Rating:</string>
-    <string name="overview">Overview:\n</string>
-    </resources>
+	<string name="app_name">Popular Movies</string>
+	<string name="error_message">An error has occurred. Please check your internet connection and try again by clicking REFRESH.</string>
+	<string name="refresh">Refresh</string>
+	<string name="most_popular">Sort by most popular</string>
+	<string name="top_rated">Sort by highest rated</string>
+	<string name="favorites">Sort by favorites</string>
+	<string name="release">Release:</string>
+	<string name="rating">Rating:</string>
+	<string name="overview">Overview:\n</string>
+	<string name="content_authority">com.example.android.popularmoviesstage2</string>
+</resources>
