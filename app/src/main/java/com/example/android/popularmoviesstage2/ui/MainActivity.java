@@ -34,7 +34,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.android.popularmoviesstage2.database.MovieContract.MOVIE_COLUMNS;
+import static com.example.android.popularmoviesstage2.database.MovieContract
+		.MOVIE_COLUMNS;
 
 /**
  * Created by Deniz Kalem on 16.05.17.
@@ -42,9 +43,7 @@ import static com.example.android.popularmoviesstage2.database.MovieContract.MOV
 
 public class MainActivity extends AppCompatActivity {
 
-	// TODO Insert your API-KEY here
-	public static final String API_KEY   = "";
-	public static final String BASE_URL  = "https://api.themoviedb.org/3/movie/";
+	public static final String BASE_URL  = "https://api.themoviedb" + "" + "" + ".org/3/movie/";
 	private final       String POPULAR   = "popular";
 	private final       String TOP_RATED = "top_rated";
 	private final       String FAVORITE  = "favorite";
@@ -52,16 +51,28 @@ public class MainActivity extends AppCompatActivity {
 	private ArrayList<Movie> movieList;
 	private TextView         tvErrorMessage;
 	private ProgressBar      pbLoadingIndicator;
+	private String sorting = POPULAR;
+	private Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
 		tvErrorMessage = (TextView) findViewById(R.id.tv_error_message_display);
 		pbLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
-		movieList = new ArrayList<>();
+		if (savedInstanceState != null) {
+			if (savedInstanceState.containsKey("sorting")) {
+				sorting = savedInstanceState.getString("sorting");
+			}
+
+			if (savedInstanceState.containsKey("movies")) {
+				movieList = savedInstanceState.getParcelableArrayList("movies");
+			}
+		} else {
+			movieList = new ArrayList<>();
+		}
+
 		movieAdapter = new MovieAdapter(this, movieList);
 		GridView gvMovies = (GridView) findViewById(R.id.gv_movies);
 		gvMovies.setAdapter(movieAdapter);
@@ -75,7 +86,16 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
-		showMovies(POPULAR);
+
+		if (savedInstanceState != null) {
+			if (!savedInstanceState.containsKey("movies")) {
+				showMovies(sorting);
+			}
+		} else {
+			showMovies(sorting);
+		}
+
+		context = this;
 	}
 
 	private void showMovies(String filter) {
@@ -126,16 +146,25 @@ public class MainActivity extends AppCompatActivity {
 
 		if (id == R.id.action_top_rated) {
 			showMovies(TOP_RATED);
+			sorting = TOP_RATED;
 			return true;
 		}
 
-		if (id == R.id.action_most_popular || id == R.id.action_refresh) {
+		if (id == R.id.action_most_popular) {
 			showMovies(POPULAR);
+			sorting = POPULAR;
 			return true;
 		}
 
 		if (id == R.id.action_favorites) {
 			showMovies(FAVORITE);
+			sorting = FAVORITE;
+			return true;
+		}
+
+
+		if (id == R.id.action_refresh) {
+			showMovies(sorting);
 			return true;
 		}
 
@@ -187,7 +216,8 @@ public class MainActivity extends AppCompatActivity {
 			String movieJsonString = null;
 			BufferedReader reader = null;
 
-			Uri uri = Uri.parse(BASE_URL).buildUpon().appendEncodedPath(params[0]).appendQueryParameter("api_key", API_KEY).build();
+			Uri uri = Uri.parse(BASE_URL).buildUpon().appendEncodedPath(params[0]).appendQueryParameter("api_key", context.getString(R.string.API_KEY))
+						 .build();
 
 			try {
 				URL url = new URL(uri.toString());
@@ -300,5 +330,15 @@ public class MainActivity extends AppCompatActivity {
 				tvErrorMessage.setVisibility(View.VISIBLE);
 			}
 		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putString("sorting", sorting);
+		if (movieList != null) {
+			outState.putParcelableArrayList("movies", movieList);
+		}
+		super.onSaveInstanceState(outState);
+
 	}
 }

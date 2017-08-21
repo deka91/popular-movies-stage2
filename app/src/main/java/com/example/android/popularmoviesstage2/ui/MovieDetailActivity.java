@@ -7,11 +7,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,23 +39,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.android.popularmoviesstage2.R.id.trailersRecyclerView;
-import static com.example.android.popularmoviesstage2.ui.MainActivity.API_KEY;
 
 /**
  * Created by Deniz Kalem on 18.05.17.
  */
 
-public class MovieDetailActivity extends AppCompatActivity implements TrailerAdapter.OnItemClicked {
+public class MovieDetailActivity extends AppCompatActivity
+		implements TrailerAdapter.OnItemClicked {
 
 	private TextView tvTitle, tvRelease, tvRating, tvDescription;
-	private ImageView      ivPoster;
-	private ReviewAdapter  reviewAdapter;
-	private TrailerAdapter trailerAdapter;
-	private Movie          movie;
-	private RecyclerView   recyclerViewTrailer;
-	private RecyclerView   recyclerViewReview;
-	private ImageButton    ibFavorite;
-	private Context        context;
+	private ImageView            ivPoster;
+	private ReviewAdapter        reviewAdapter;
+	private TrailerAdapter       trailerAdapter;
+	private Movie                movie;
+	private RecyclerView         recyclerViewTrailer;
+	private RecyclerView         recyclerViewReview;
+	private FloatingActionButton ibFavorite;
+	private Context              context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,19 +72,31 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 
 		if (movie != null) {
 			tvTitle.setText(movie.getTitle());
-			tvRelease.setText(getResources().getString(R.string.release) + " " + movie.getReleaseDate());
-			tvRating.setText(getResources().getString(R.string.rating) + " " + movie.getVoteAverage() + "/10");
-			tvDescription.setText(getResources().getString(R.string.overview) + movie.getOverview());
+			tvRelease.setText(getResources().getString(R.string.release) + " "
+									  + movie
+					.getReleaseDate());
+			tvRating.setText(getResources().getString(R.string.rating) + " " +
+									 movie
+					.getVoteAverage() + "/10");
+			tvDescription.setText(getResources().getString(R.string.overview)
+										  + movie
+					.getOverview());
 			loadPoster(movie.getPosterPath());
 		}
 
-		ibFavorite = (ImageButton) findViewById(R.id.ib_favorite);
+		ibFavorite = (FloatingActionButton) findViewById(R.id.ib_favorite);
 
-		LinearLayoutManager trailerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-		LinearLayoutManager reviewLayoutManager = new LinearLayoutManager(this);
+		LinearLayoutManager trailerLayoutManager = new LinearLayoutManager
+				(this,
+																		   LinearLayoutManager.HORIZONTAL,
+																		   false);
+		LinearLayoutManager reviewLayoutManager = new LinearLayoutManager
+				(this);
 
-		recyclerViewTrailer = (RecyclerView) findViewById(trailersRecyclerView);
-		recyclerViewReview = (RecyclerView) findViewById(R.id.reviewsRecyclerView);
+		recyclerViewTrailer = (RecyclerView) findViewById
+				(trailersRecyclerView);
+		recyclerViewReview = (RecyclerView) findViewById(R.id
+																 .reviewsRecyclerView);
 		recyclerViewTrailer.setLayoutManager(trailerLayoutManager);
 		recyclerViewReview.setLayoutManager(reviewLayoutManager);
 
@@ -103,7 +115,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 	public void onItemClick(int position) {
 		Trailer trailer = trailerAdapter.getItem(position);
 		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + trailer.getKey()));
+		intent.setData(Uri.parse("http://www.youtube.com/watch?v=" + trailer
+				.getKey()));
 		startActivity(intent);
 	}
 
@@ -117,20 +130,26 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 			if (isInFavorites(movie.getId()) == 1) {
 				ibFavorite.setImageResource(R.drawable.ic_star_black_24dp);
 			} else {
-				ibFavorite.setImageResource(R.drawable.ic_star_border_black_24dp);
+				ibFavorite.setImageResource(R.drawable
+													.ic_star_border_black_24dp);
 			}
 		}
 	}
 
 	private void loadPoster(String path) {
-		String urlBuilder = new StringBuilder().append(MovieAdapter.BASE_URL).append(MovieAdapter.IMAGE_SIZE).append(path).toString();
+		String urlBuilder = new StringBuilder().append(MovieAdapter.BASE_URL)
+											   .append(MovieAdapter.IMAGE_SIZE)
+											   .append(path)
+											   .toString();
 		Picasso.with(getApplicationContext()).load(urlBuilder).into(ivPoster);
 	}
 
 
-	public class FetchTrailerTask extends AsyncTask<String, Void, List<Trailer>> {
+	public class FetchTrailerTask
+			extends AsyncTask<String, Void, List<Trailer>> {
 
-		private List<Trailer> getTrailerDataFromJson(String jsonStr) throws JSONException {
+		private List<Trailer> getTrailerDataFromJson(String jsonStr) throws
+				JSONException {
 			JSONObject trailerJson = new JSONObject(jsonStr);
 			JSONArray trailerArray = trailerJson.getJSONArray("results");
 
@@ -160,9 +179,15 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 			String jsonStr = null;
 
 			try {
-				final String BASE_URL = "http://api.themoviedb.org/3/movie/" + params[0] + "/videos";
+				final String BASE_URL = "http://api.themoviedb.org/3/movie/" +
+						params[0] + "/videos";
 
-				Uri builtUri = Uri.parse(BASE_URL).buildUpon().appendQueryParameter("api_key", API_KEY).build();
+				Uri builtUri = Uri.parse(BASE_URL)
+								  .buildUpon()
+								  .appendQueryParameter("api_key",
+														context.getString(R
+																				  .string.API_KEY))
+								  .build();
 
 				URL url = new URL(builtUri.toString());
 
@@ -175,7 +200,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 				if (inputStream == null) {
 					return null;
 				}
-				reader = new BufferedReader(new InputStreamReader(inputStream));
+				reader = new BufferedReader(new InputStreamReader
+													(inputStream));
 
 				String line;
 				while ((line = reader.readLine()) != null) {
@@ -227,9 +253,11 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 	}
 
 
-	public class FetchReviewsTask extends AsyncTask<String, Void, List<Review>> {
+	public class FetchReviewsTask
+			extends AsyncTask<String, Void, List<Review>> {
 
-		private List<Review> getReviewsDataFromJson(String jsonStr) throws JSONException {
+		private List<Review> getReviewsDataFromJson(String jsonStr) throws
+				JSONException {
 			JSONObject reviewJson = new JSONObject(jsonStr);
 			JSONArray reviewArray = reviewJson.getJSONArray("results");
 
@@ -256,9 +284,15 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 			String jsonStr = null;
 
 			try {
-				final String BASE_URL = "http://api.themoviedb.org/3/movie/" + params[0] + "/reviews";
+				final String BASE_URL = "http://api.themoviedb.org/3/movie/" +
+						params[0] + "/reviews";
 
-				Uri builtUri = Uri.parse(BASE_URL).buildUpon().appendQueryParameter("api_key", API_KEY).build();
+				Uri builtUri = Uri.parse(BASE_URL)
+								  .buildUpon()
+								  .appendQueryParameter("api_key",
+														context.getString(R
+																				  .string.API_KEY))
+								  .build();
 				URL url = new URL(builtUri.toString());
 
 				urlConnection = (HttpURLConnection) url.openConnection();
@@ -270,7 +304,8 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 				if (inputStream == null) {
 					return null;
 				}
-				reader = new BufferedReader(new InputStreamReader(inputStream));
+				reader = new BufferedReader(new InputStreamReader
+													(inputStream));
 
 				String line;
 				while ((line = reader.readLine()) != null) {
@@ -339,14 +374,18 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 						new AsyncTask<Void, Void, Integer>() {
 							@Override
 							protected Integer doInBackground(Void... params) {
-								return getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI,
+								return getContentResolver().delete
+										(MovieContract.MovieEntry.CONTENT_URI,
 																   MovieContract.MovieEntry.COLUMN_ID + " = ?",
-																   new String[]{movie.getId()});
+																   new
+												 String[]{
+																		   movie.getId()});
 							}
 
 							@Override
 							protected void onPostExecute(Integer rowsDeleted) {
-								ibFavorite.setImageResource(R.drawable.ic_star_border_black_24dp);
+								ibFavorite.setImageResource(R.drawable
+																	.ic_star_border_black_24dp);
 							}
 						}.execute();
 					} else {
@@ -356,19 +395,33 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 							protected Uri doInBackground(Void... params) {
 								ContentValues values = new ContentValues();
 
-								values.put(MovieContract.MovieEntry.COLUMN_ID, movie.getId());
-								values.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
-								values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
-								values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
-								values.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
-								values.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+								values.put(MovieContract.MovieEntry.COLUMN_ID,
+										   movie.getId());
+								values.put(MovieContract.MovieEntry
+												   .COLUMN_TITLE,
+										   movie.getTitle());
+								values.put(MovieContract.MovieEntry
+												   .COLUMN_POSTER_PATH,
+										   movie.getPosterPath());
+								values.put(MovieContract.MovieEntry
+												   .COLUMN_OVERVIEW,
+										   movie.getOverview());
+								values.put(MovieContract.MovieEntry
+												   .COLUMN_VOTE_AVERAGE,
+										   movie.getVoteAverage());
+								values.put(MovieContract.MovieEntry
+												   .COLUMN_RELEASE_DATE,
+										   movie.getReleaseDate());
 
-								return getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values);
+								return getContentResolver().insert
+										(MovieContract.MovieEntry.CONTENT_URI,
+																   values);
 							}
 
 							@Override
 							protected void onPostExecute(Uri returnUri) {
-								ibFavorite.setImageResource(R.drawable.ic_star_black_24dp);
+								ibFavorite.setImageResource(R.drawable
+																	.ic_star_black_24dp);
 							}
 						}.execute();
 					}
@@ -379,9 +432,11 @@ public class MovieDetailActivity extends AppCompatActivity implements TrailerAda
 	}
 
 	public int isInFavorites(String id) {
-		Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+		Cursor cursor = getContentResolver().query(MovieContract.MovieEntry
+														   .CONTENT_URI,
 												   null,
-												   MovieContract.MovieEntry.COLUMN_ID + " = ?",
+												   MovieContract.MovieEntry
+														   .COLUMN_ID + " = ?",
 												   new String[]{id},
 												   null);
 		cursor.close();

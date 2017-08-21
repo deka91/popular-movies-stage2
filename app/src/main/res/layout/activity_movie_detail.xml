@@ -34,17 +34,18 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_margin="10dp"
+					android:layout_toLeftOf="@+id/ib_favorite"
 					android:textStyle="bold"/>
 
 
-				<ImageButton
+				<android.support.design.widget.FloatingActionButton
 					android:id="@+id/ib_favorite"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentEnd="true"
 					android:layout_alignParentRight="true"
-					android:background="@drawable/ic_star_border_black_24dp"
 					android:onClick="addToFavorite"
+					android:src="@drawable/ic_star_border_black_24dp"
 					app:layout_constraintBottom_toTopOf="parent"
 					app:layout_constraintRight_toRightOf="parent"/>
 

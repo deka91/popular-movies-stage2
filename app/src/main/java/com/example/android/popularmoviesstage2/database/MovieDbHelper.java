@@ -20,13 +20,14 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieContract.MovieEntry.TABLE_MOVIE + " (" +
-				MovieContract.MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				MovieContract.MovieEntry.COLUMN_ID + " TEXT NOT NULL, " +
-				MovieContract.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
-				MovieContract.MovieEntry.COLUMN_POSTER_PATH + " TEXT, " +
-				MovieContract.MovieEntry.COLUMN_OVERVIEW + " TEXT, " +
-				MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL, " +
+		final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + MovieContract
+				.MovieEntry.TABLE_MOVIE + " (" + MovieContract.MovieEntry._ID
+				+ " INTEGER PRIMARY KEY AUTOINCREMENT, " + MovieContract
+				.MovieEntry.COLUMN_ID + " TEXT NOT NULL, " + MovieContract
+				.MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " + MovieContract
+				.MovieEntry.COLUMN_POSTER_PATH + " TEXT, " + MovieContract
+				.MovieEntry.COLUMN_OVERVIEW + " TEXT, " + MovieContract
+				.MovieEntry.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL, " +
 				MovieContract.MovieEntry.COLUMN_RELEASE_DATE + " TEXT);";
 
 		db.execSQL(SQL_CREATE_MOVIE_TABLE);
@@ -34,7 +35,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry.TABLE_MOVIE);
+		db.execSQL("DROP TABLE IF EXISTS " + MovieContract.MovieEntry
+				.TABLE_MOVIE);
 		onCreate(db);
 	}
 

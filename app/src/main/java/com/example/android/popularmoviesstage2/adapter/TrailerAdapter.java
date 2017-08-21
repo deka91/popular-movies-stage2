@@ -17,7 +17,8 @@ import java.util.ArrayList;
  * Created by Deniz Kalem on 11.08.17.
  */
 
-public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TrailerAdapter
+		extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	Context context;
 	ArrayList<Trailer> trailers = new ArrayList<>();
@@ -48,22 +49,31 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 	}
 
 	@Override
-	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
+													  int viewType) {
 		RecyclerView.ViewHolder viewHolder;
 		View view;
-		view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trailer_item, parent, false);
+		view = LayoutInflater.from(parent.getContext())
+							 .inflate(R.layout.trailer_item, parent, false);
 		viewHolder = new MyItemHolder(view);
 
 		return viewHolder;
 	}
 
 	@Override
-	public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+	public void onBindViewHolder(final RecyclerView.ViewHolder holder,
+								 final int position) {
 		String id = trailers.get(position).getKey();
-		String thumbnailURL = "http://img.youtube.com/vi/".concat(id).concat("/hqdefault.jpg");
-		Picasso.with(context).load(thumbnailURL).placeholder(R.drawable.thumbnail).into(((MyItemHolder) holder).ivTrailerThumbnail);
+		String thumbnailURL = "http://img.youtube.com/vi/".concat(id)
+														  .concat("/hqdefault" +
+																		  ".jpg");
+		Picasso.with(context)
+			   .load(thumbnailURL)
+			   .placeholder(R.drawable.thumbnail)
+			   .into(((MyItemHolder) holder).ivTrailerThumbnail);
 
-		((MyItemHolder) holder).ivTrailerThumbnail.setOnClickListener(new View.OnClickListener() {
+		((MyItemHolder) holder).ivTrailerThumbnail.setOnClickListener(new View
+				.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onClick.onItemClick(position);
@@ -82,7 +92,8 @@ public class TrailerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 		public MyItemHolder(View itemView) {
 			super(itemView);
 
-			ivTrailerThumbnail = (ImageView) itemView.findViewById(R.id.iv_trailer_thumbnail);
+			ivTrailerThumbnail = (ImageView) itemView.findViewById(R.id
+																		   .iv_trailer_thumbnail);
 		}
 
 	}

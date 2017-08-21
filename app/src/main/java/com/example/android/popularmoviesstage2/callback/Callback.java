@@ -10,5 +10,7 @@ import java.util.List;
 
 public class Callback {
 
-    public void updateAdapter(List<Movie> movies){};
+	public void updateAdapter(List<Movie> movies) {}
+
+	;
 }

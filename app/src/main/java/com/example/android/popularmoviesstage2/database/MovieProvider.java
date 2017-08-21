@@ -33,12 +33,23 @@ public class MovieProvider extends ContentProvider {
 	}
 
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+	public Cursor query(Uri uri,
+						String[] projection,
+						String selection,
+						String[] selectionArgs,
+						String sortOrder) {
 		Cursor retCursor;
 		switch (sUriMatcher.match(uri)) {
 			case MOVIE: {
 				retCursor = mOpenHelper.getReadableDatabase()
-									   .query(MovieContract.MovieEntry.TABLE_MOVIE, projection, selection, selectionArgs, null, null, sortOrder);
+									   .query(MovieContract.MovieEntry
+													  .TABLE_MOVIE,
+											  projection,
+											  selection,
+											  selectionArgs,
+											  null,
+											  null,
+											  sortOrder);
 				break;
 			}
 			default:
@@ -70,11 +81,14 @@ public class MovieProvider extends ContentProvider {
 
 		switch (sUriMatcher.match(uri)) {
 			case MOVIE: {
-				long _id = db.insert(MovieContract.MovieEntry.TABLE_MOVIE, null, values);
+				long _id = db.insert(MovieContract.MovieEntry.TABLE_MOVIE,
+									 null,
+									 values);
 				if (_id > 0) {
 					returnUri = MovieContract.MovieEntry.buildMoviesri(_id);
 				} else {
-					throw new android.database.SQLException("Failed to insert row into " + uri);
+					throw new android.database.SQLException(
+							"Failed to insert row into " + uri);
 				}
 				break;
 			}
@@ -95,7 +109,9 @@ public class MovieProvider extends ContentProvider {
 		if (null == selection) { selection = "1"; }
 		switch (sUriMatcher.match(uri)) {
 			case MOVIE:
-				rowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_MOVIE, selection, selectionArgs);
+				rowsDeleted = db.delete(MovieContract.MovieEntry.TABLE_MOVIE,
+										selection,
+										selectionArgs);
 				break;
 			default:
 				throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -108,14 +124,20 @@ public class MovieProvider extends ContentProvider {
 	}
 
 	@Override
-	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+	public int update(Uri uri,
+					  ContentValues values,
+					  String selection,
+					  String[] selectionArgs) {
 
 		final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 		int rowsUpdated;
 
 		switch (sUriMatcher.match(uri)) {
 			case MOVIE:
-				rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_MOVIE, values, selection, selectionArgs);
+				rowsUpdated = db.update(MovieContract.MovieEntry.TABLE_MOVIE,
+										values,
+										selection,
+										selectionArgs);
 				break;
 			default:
 				throw new UnsupportedOperationException("Unknown uri: " + uri);

@@ -44,19 +44,34 @@ public class MovieAdapter extends BaseAdapter {
 		return position;
 	}
 
+	public void setData(List<Movie> data) {
+		clear();
+		for (Movie movie : data) {
+			movies.add(movie);
+		}
+	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Movie movie = getItem(position);
 		ImageView imageView;
 
 		if (convertView == null) {
-			LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			imageView = (ImageView) inflater.inflate(R.layout.movie_item, parent, false);
+			LayoutInflater inflater = (LayoutInflater) parent.getContext()
+															 .getSystemService(
+																	 Context
+																			 .LAYOUT_INFLATER_SERVICE);
+			imageView = (ImageView) inflater.inflate(R.layout.movie_item,
+													 parent,
+													 false);
 		} else {
 			imageView = (ImageView) convertView;
 		}
 
-		String url = new StringBuilder().append(BASE_URL).append(IMAGE_SIZE).append(movie.getPosterPath().trim()).toString();
+		String url = new StringBuilder().append(BASE_URL)
+										.append(IMAGE_SIZE)
+										.append(movie.getPosterPath().trim())
+										.toString();
 
 		Picasso.with(context).load(url).into(imageView);
 		return imageView;
